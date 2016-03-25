@@ -1,11 +1,14 @@
 package com.chekn.timer;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -15,13 +18,15 @@ import com.alibaba.fastjson.JSONObject;
 
 public class ParseJSON {
 	
+	private File file=new File("D:\\Fx.txt");
+	
 	public static void main(String[] args){
 		try {
 			ParseJSON pj=new ParseJSON();
 			int i=0;
 			for(String cptid:pj.getCptId()){
-				pj.read(cptid,"QQWalc2TFzew5nT6ZuqQIbheEzYMCbFG");
-				System.out.println((++i)+"、CptID:"+cptid+":******************************************");
+				pj.writeStr2File(pj.read(cptid,"QQWalc2TFzew5nT6ZuqQIbheEzYMCbFG"));
+				pj.writeStr2File("\r\n"+(++i)+", ***************************************"+"\r\n");
 				//break;
 			}
 			
@@ -47,7 +52,9 @@ public class ParseJSON {
 		return cptIds;
 	}
 	
-	public void read(String cptID,String guid) throws IOException{
+	public String read(String cptID,String guid) throws IOException{
+		StringBuilder strBu=new StringBuilder();
+		
 		String url="http://wide.ksbao.com:8001/api/exam/getChapterTest";
 		Map<String,String> params=new HashMap<String,String>();
 		params.put("appID", "236");
@@ -68,8 +75,8 @@ public class ParseJSON {
 			JSONObject jsonObjStyleItem=(JSONObject) jsonObjStyleItem_O;
 			String itemType=jsonObjStyleItem.getString("Type");
 			String itemStyle=jsonObjStyleItem.getString("Style");
-			System.out.println(StringUtils.defaultString((String)jsonObjStyleItem.get("SubType")));
-			System.out.println(jsonObjStyleItem.get("Explain"));
+			//strBu.append(StringUtils.defaultString((String)jsonObjStyleItem.get("SubType"))+"\r\n");
+			strBu.append(jsonObjStyleItem.get("Explain")+"\r\n");
 
 			int itemLevel=1;
 			JSONArray jsonArrTestItems=jsonObjStyleItem.getJSONArray("TestItems");
@@ -80,31 +87,31 @@ public class ParseJSON {
 				
 				switch(itemType){
 					case "ATEST": {
-							System.out.println(typeLevel+"."+itemLevel+"、"+jsonObjTestItem.get("Title")+"("+itemStyle+")");
-							this.readSelectedItems(jsonObjTestItem);
-							System.out.print("\n");
+							strBu.append(typeLevel+"."+itemLevel+"、"+jsonObjTestItem.get("Title")+"("+itemStyle+")"+"\r\n");
+							strBu.append(this.readSelectedItems(jsonObjTestItem));
+							strBu.append(("\r\n"));
 							
-							System.out.println(jsonObjTestItem.get("Answer"));
-							System.out.println(jsonObjTestItem.get("Explain"));
-							System.out.print("\n\n");
+							strBu.append(jsonObjTestItem.get("Answer")+"\r\n");
+							strBu.append(jsonObjTestItem.get("Explain")+"\r\n");
+							strBu.append(("\r\n"));
 						}
 						break;
 					case "A3TEST":{ 
-							System.out.println(typeLevel+"."+itemLevel+"、"+jsonObjTestItem.get("FrontTitle")+"("+itemStyle+")");
+							strBu.append(typeLevel+"."+itemLevel+"、"+jsonObjTestItem.get("FrontTitle")+"("+itemStyle+")"+"\r\n");
 							
 							int nItemLevel=1;
 							JSONArray jsonArrA3TestItems=jsonObjTestItem.getJSONArray("A3TestItems");
 							for(Object jsonObjA3TestItem_O:jsonArrA3TestItems.toArray()){
 								JSONObject jsonObjA3TestItem=(JSONObject) jsonObjA3TestItem_O;
-								System.out.println(typeLevel+"."+itemLevel+"."+nItemLevel+"、"+jsonObjA3TestItem.get("Title"));
-								this.readSelectedItems(jsonObjA3TestItem);
-								System.out.print("\n");
+								strBu.append(typeLevel+"."+itemLevel+"."+nItemLevel+"、"+jsonObjA3TestItem.get("Title")+"\r\n");
+								strBu.append(this.readSelectedItems(jsonObjA3TestItem)+"\r\n");
+								strBu.append("\r\n");
 								
-								System.out.println(jsonObjA3TestItem.get("Answer"));
-								System.out.println(jsonObjA3TestItem.get("Explain"));
+								strBu.append(jsonObjA3TestItem.get("Answer")+"\r\n");
+								strBu.append(jsonObjA3TestItem.get("Explain")+"\r\n");
 								nItemLevel++;
 							}
-							System.out.println(jsonObjTestItem.get("Explain"));
+							strBu.append(jsonObjTestItem.get("Explain")+"\r\n");
 						}
 						break;
 					case "BTEST":{
@@ -112,12 +119,12 @@ public class ParseJSON {
 							int nItemLevel=1;
 							for(Object jsonObjBTestItem_O:jsonArrBTestItems.toArray()){
 								JSONObject jsonObjBTestItem=(JSONObject) jsonObjBTestItem_O;
-								System.out.println(typeLevel+"."+itemLevel+"."+nItemLevel+"、"+jsonObjBTestItem.get("Title")+"("+itemStyle+")");
-								this.readSelectedItems(jsonObjTestItem);
-								System.out.print("\n");
+								strBu.append(typeLevel+"."+itemLevel+"."+nItemLevel+"、"+jsonObjBTestItem.get("Title")+"("+itemStyle+")"+"\r\n");
+								strBu.append(this.readSelectedItems(jsonObjTestItem)+"\r\n");
+								strBu.append("\r\n");
 								
-								System.out.println(jsonObjBTestItem.get("Answer"));
-								System.out.println(jsonObjBTestItem.get("Explain"));
+								strBu.append(jsonObjBTestItem.get("Answer")+"\r\n");
+								strBu.append(jsonObjBTestItem.get("Explain")+"\r\n");
 								nItemLevel++;
 							}
 						}
@@ -127,23 +134,29 @@ public class ParseJSON {
 				itemLevel++;
 			}
 			
-			System.out.print("\n\n\n");
+			strBu.append("\r\n");
 			typeLevel++;
 		}
 		
 		//System.out.println(jsonObjMess);
+		return strBu.toString();
 	}
 	
-	public void appendFile(){
+	public void writeStr2File(String data) throws IOException{
+		System.out.println(data);
+		FileUtils.writeStringToFile(file, data, "UTF-8", true);
+	}
+	
+	public String readSelectedItems(JSONObject jsonObj){
+		StringBuilder strBu=new StringBuilder();
 		
-	}
-	
-	public void readSelectedItems(JSONObject jsonObj){
 		JSONArray jsonArrSelectedItems=jsonObj.getJSONArray("SelectedItems");
 		if(jsonArrSelectedItems!=null)
 			for(Object jsonObjSelectedItem_O:jsonArrSelectedItems.toArray()){
 				JSONObject jsonObjSelectedItem=(JSONObject) jsonObjSelectedItem_O;
-				System.out.println(jsonObjSelectedItem.getString("ItemName")+" : "+jsonObjSelectedItem.getString("Content"));
+				strBu.append(jsonObjSelectedItem.getString("ItemName")+" : "+jsonObjSelectedItem.getString("Content")+"\r\n");
 			}
+		
+		return strBu.toString();
 	}
 }
