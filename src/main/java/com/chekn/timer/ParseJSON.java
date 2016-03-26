@@ -1,18 +1,20 @@
 package com.chekn.timer;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
@@ -20,17 +22,23 @@ public class ParseJSON {
 	
 	private File file=new File("D:\\Fx.txt");
 	
-	public static void main(String[] args){
+	public static void main(String[] args) {
 		try {
 			ParseJSON pj=new ParseJSON();
-			int i=0;
-			for(String cptid:pj.getCptId()){
-				pj.writeStr2File(pj.read(cptid,"QQWalc2TFzew5nT6ZuqQIbheEzYMCbFG"));
-				pj.writeStr2File("\r\n"+(++i)+", ***************************************"+"\r\n");
+			
+			Map<String,String> cptInfo=pj.getCptDepMenu();
+			for(String cptid:cptInfo.keySet()){
+				String cptName=cptInfo.get(cptid);
+				String cptContent=pj.read(cptid,"OijJvpQJ8k8zBOA1ji6tRKSaWPnLAA8U");
+				
+				String cptFileName=cptName.replaceAll("[\\\\/:*?\"<>|]", "");
+				FileUtils.writeStringToFile(new File("D:\\codeForAunt\\"+cptFileName+".txt"), cptContent, "UTF-8");
+				TimeUnit.SECONDS.sleep(1);
+				System.out.println("完成>"+cptid+":"+cptName+"->"+cptFileName);
 				//break;
 			}
 			
-		} catch (IOException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -50,6 +58,44 @@ public class ParseJSON {
 		}
 		
 		return cptIds;
+	}
+	
+	public Map<String,String> getCptDepMenu() throws IOException{
+		Map<String,String> storeCptsMap=new LinkedHashMap<String,String>();
+		
+		String url="http://wide.ksbao.com:8001/api/chapterMenu/getChapterMenu/ZC_FC";
+		Document doc= Jsoup.connect(url).get();
+		String jsonStrData=doc.body().text();
+		JSONObject jsonObjData=JSONObject.parseObject(jsonStrData);
+		String jsonStrMess=jsonObjData.getJSONObject("data").getString("ChapterMenuJson");
+		
+		JSONObject jsonObjMess=JSON.parseObject(jsonStrMess);
+		JSONArray jsonArrChilds=jsonObjMess.getJSONArray("Childs");
+		this.depMenuReadCpt(jsonArrChilds, "", storeCptsMap);
+		/*for(Entry<String,String> cptMap:storeCptsMap.entrySet()){
+			System.out.println(cptMap.getKey()+"->"+cptMap.getValue());
+		}*/
+		
+		return storeCptsMap;
+	}
+	
+	public void depMenuReadCpt(JSONArray jsonArrChilds, String warpLineStr, Map<String,String> storeCptsMap){
+		
+		for(Object jsonObjChild_o:jsonArrChilds.toArray()){
+			JSONObject jsonObjChild=(JSONObject) jsonObjChild_o;
+			String id=jsonObjChild.getString("ID");
+			String nodeType=jsonObjChild.getString("NodeType");
+			String name=jsonObjChild.getString("Name");
+			System.out.println(warpLineStr+name);
+			
+			if(!nodeType.equals("Chapter")){
+				JSONArray jsonArrSubChilds=jsonObjChild.getJSONArray("Childs");
+				depMenuReadCpt(jsonArrSubChilds,warpLineStr+"\t",storeCptsMap);
+			}else{
+				storeCptsMap.put(id, name);
+			}
+		}
+		
 	}
 	
 	public String read(String cptID,String guid) throws IOException{
