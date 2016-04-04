@@ -73,7 +73,24 @@
 			<artifactId>commons-io</artifactId>
 			<version>2.4</version>
 		</dependency>
-
+		
+		<!-- jacob、itext -->
+		<dependency>
+			<groupId>com.hynnet</groupId>
+			<artifactId>jacob</artifactId>
+			<version>1.18</version>
+		</dependency>
+		<dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>itextpdf</artifactId>
+			<version>5.5.8</version>
+		</dependency>
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcprov-jdk15on</artifactId>
+			<version>1.52</version>
+		</dependency>
+		
 	</dependencies>
 		<build>
 		<plugins>
