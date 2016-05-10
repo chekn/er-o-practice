@@ -77,4 +77,6 @@ while(lastRcds.hasNext()) {
 
 console.info("un:"+",  reserve:"+",  remove count:");
 
+16\修改子文档
+db.hq_run_data.update({"_id" : ObjectId("572af22313176818534b6dac")},{$set:{"_prevRankInfo.003639":9}});
 
