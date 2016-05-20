@@ -1,4 +1,4 @@
-package com.ckn.practice;
+package com.ckn.demo;
 
 import java.text.ParseException;
 import java.util.Date;
