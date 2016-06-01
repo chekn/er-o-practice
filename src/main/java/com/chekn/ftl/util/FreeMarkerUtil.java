@@ -11,6 +11,11 @@ import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
 
 public class FreeMarkerUtil {
+	
+	/**
+	 * @param basePackagePath  mind this param name , path not name
+	 * @return
+	 */
 	public static Configuration createConfig(String basePackagePath) {
 		Configuration config = new Configuration(Configuration.VERSION_2_3_23);
 		config.setDefaultEncoding("UTF-8");
