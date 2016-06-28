@@ -1,10 +1,13 @@
 package com.ckn.practice;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
-import org.apache.commons.io.FileUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Document.OutputSettings;
@@ -59,13 +62,14 @@ public class NetResRead {
 			}
 			System.out.println("deal:"+chapterPage);
 			bookStr.append(strBu);
-			bookStr.append("\n\n\n");
+			bookStr.append("\n\n\nchapter\n\n\n");
 		}
 		String classPath=NetResRead.class.getClassLoader().getResource("").getPath().toString().substring(1);
 		String sourcePath=classPath+"../../src/main/java/";
 		try {
+			//FileUtils.write(new File(sourcePath+"ccc.pdf"), bookStr.toString());
+			writeObject(sourcePath+"bookStr.tmp",bookStr);
 			createPdf(sourcePath+"ccc.pdf", bookStr.toString());
-			FileUtils.write(new File(sourcePath+"ccc.pdf"), bookStr.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -106,8 +110,7 @@ public class NetResRead {
 		//step5
 		doc.close();
 	}
-	
-	
+
 	/**
 	 * // step 1
         Document document = new Document();
@@ -121,5 +124,49 @@ public class NetResRead {
         // step 5
         document.close();
 	 */
+	
+	/**
+	 * 将对象序列化到磁盘文件中
+	 * 序列化主要依赖java.io.ObjectOutputStream类,该类对java.io.FileOutputStream进一步做了封装,
+	    这里主要使用ObjectOutputStream类的writeObject()方法实现序列化功能
+	 * @param o
+	 * @throws Exception
+	 */
+	public static void writeObject(String freezeObjFilePath,Object o) throws Exception{
+		File f=new File(freezeObjFilePath);
+		if(f.exists())
+			f.delete();
+		
+		FileOutputStream os=new FileOutputStream(f);
+		
+		//ObjectOutputStream 核心类
+		ObjectOutputStream oos =new ObjectOutputStream(os);
+		oos.writeObject(o);
+		
+		oos.close();
+		os.close();
+	}
+	
+	/**
+	 * 反序列化，将磁盘文件转化为对象
+	 * 反序列化主要依赖java.io.ObjectInputStream类,该类对java.io.InputStream进一步做了封装,
+	    这里主要使用ObjectInputStream类的readObject()方法实现反序列化功能。
+	 * @param f
+	 * @return
+	 * @throws Exception
+	 */
+	public static Object readObject(File f) throws Exception{
+		InputStream is=new FileInputStream(f);
+		
+		//ObjectInputStream 核心类
+		ObjectInputStream ois=new ObjectInputStream(is);
+		Object ot=ois.readObject();
+		
+		ois.close();
+		is.close();
+		
+		return ot;
+	}
+	
 	
 }
