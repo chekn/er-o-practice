@@ -16,9 +16,9 @@
 
 	<dependencies>
 		<dependency>
-		    <groupId>org.apache.commons</groupId>
-		    <artifactId>commons-csv</artifactId>
-		    <version>1.2</version>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-csv</artifactId>
+			<version>1.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jsoup</groupId>
@@ -83,7 +83,7 @@
 			<artifactId>commons-io</artifactId>
 			<version>2.4</version>
 		</dependency>
-		
+
 		<!-- jacob、itext -->
 		<dependency>
 			<groupId>com.hynnet</groupId>
@@ -100,7 +100,17 @@
 			<artifactId>bcprov-jdk15on</artifactId>
 			<version>1.52</version>
 		</dependency>
-		
+		<dependency>
+			<groupId>com.itextpdf.tool</groupId>
+			<artifactId>xmlworker</artifactId>
+			<version>5.5.8</version>
+		</dependency>
+		<dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>itext-asian</artifactId>
+			<version>5.2.0</version>
+		</dependency>
+
 		<!-- freemarker -->
 		<dependency>
 			<groupId>org.freemarker</groupId>
@@ -108,7 +118,7 @@
 			<version>2.3.23</version>
 		</dependency>
 	</dependencies>
-		<build>
+	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
