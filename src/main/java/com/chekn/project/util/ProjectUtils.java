@@ -1,4 +1,4 @@
-package com.ckn.practice;
+package com.chekn.project.util;
 
 /**
  * 

@@ -1,4 +1,4 @@
-package com.ckn.practice;
+package com.chekn.mem.util;
 
 import java.io.File;
 import java.io.FileInputStream;

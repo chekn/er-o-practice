@@ -1,4 +1,4 @@
-package com.ckn.practice;
+package com.ckn.practice.book;
 
 import java.util.List;
 

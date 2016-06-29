@@ -1,4 +1,5 @@
-package com.ckn.practice;
+package com.ckn.practice.book;
+
 
 /**
  * 
