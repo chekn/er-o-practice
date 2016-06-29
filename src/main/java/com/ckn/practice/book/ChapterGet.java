@@ -1,5 +1,7 @@
 package com.ckn.practice.book;
 
+import java.io.IOException;
+
 
 /**
  * 
@@ -8,7 +10,7 @@ package com.ckn.practice.book;
  */
 public interface ChapterGet {
 	
-	public Chapter queryChapter(Index index);
+	public Chapter queryChapter(Index index) throws IOException;
 	
 	
 }

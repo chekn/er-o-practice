@@ -30,9 +30,9 @@ public class BookGet {
 		this.outputs = outputs;
 	}
 	
-	public void go(String indexsPageUrl) throws Exception {
+	public void go() throws Exception {
 		logger.info("1、getIndexs ");
-		List<Index> indexs= indexGet.queryBookIndexs(indexsPageUrl);
+		List<Index> indexs= indexGet.queryBookIndexs();
 		
 		logger.info("2、getChapters ");
 		List<Chapter> chapters=new ArrayList<Chapter>();

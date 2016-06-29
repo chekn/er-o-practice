@@ -11,6 +11,6 @@ public interface Output {
 	
 	public String getOutputName();
 	
-	public void opToDisk(List<Chapter> chapters);
+	public void opToDisk(List<Chapter> chapters) throws Exception;
 
 }

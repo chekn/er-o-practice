@@ -1,5 +1,6 @@
 package com.ckn.practice.book;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -9,6 +10,6 @@ import java.util.List;
  */
 public interface IndexGet {
 	
-	public List<Index> queryBookIndexs(String indexsPageUrl);
+	public List<Index> queryBookIndexs() throws IOException;
 	
 }
