@@ -6,7 +6,7 @@ import java.util.List;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-public abstract class JsoupIndexGet implements IndexGet {
+public abstract class JsoupIndexsGet implements IndexsGet {
 
 	public abstract String getIndexPageUrl();
 	

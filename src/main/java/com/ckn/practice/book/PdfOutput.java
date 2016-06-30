@@ -39,8 +39,16 @@ public class PdfOutput implements Output {
 		//step4
 		BaseFont bfChinese = BaseFont.createFont( "STSongStd-Light" ,  "UniGB-UCS2-H" ,  false );
 		//Font fontChinese =  new  Font(bfChinese,12,Font.NORMAL,Color.GREEN);  
-		Font fontChinese =  new  Font(bfChinese, 12 , Font.NORMAL, BaseColor.BLACK);   
-		doc.add(new Paragraph("",fontChinese));
+		Font fontChinese =  new  Font(bfChinese, 12 , Font.NORMAL, BaseColor.BLACK);
+		for(Chapter chapter:chapters) {
+			StringBuilder strBu=new StringBuilder();
+			
+			List<String> allLines=chapter.getChapterLines();
+			for(String line:allLines) 
+				strBu.append(line).append("\n");
+			
+			doc.add(new Paragraph(strBu.toString(),fontChinese));
+		}
 		
 		//step5
 		doc.close();

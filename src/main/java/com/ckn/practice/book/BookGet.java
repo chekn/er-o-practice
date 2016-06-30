@@ -14,7 +14,7 @@ import org.apache.log4j.Logger;
 public class BookGet {
 	private Logger logger =Logger.getLogger(this.getClass());
 	
-	private IndexGet indexGet;
+	private IndexsGet indexsGet;
 	private ChapterGet chapterGet;
 	private List<Output> outputs;
 	
@@ -23,16 +23,16 @@ public class BookGet {
 	 * @param chapterGet
 	 * @param outputs
 	 */
-	public BookGet(IndexGet indexGet, ChapterGet chapterGet, List<Output> outputs) {
+	public BookGet(IndexsGet indexsGet, ChapterGet chapterGet, List<Output> outputs) {
 		super();
-		this.indexGet = indexGet;
+		this.indexsGet = indexsGet;
 		this.chapterGet = chapterGet;
 		this.outputs = outputs;
 	}
 	
 	public void go() throws Exception {
 		logger.info("1、getIndexs ");
-		List<Index> indexs= indexGet.queryBookIndexs();
+		List<Index> indexs= indexsGet.queryBookIndexs();
 		
 		logger.info("2、getChapters ");
 		List<Chapter> chapters=new ArrayList<Chapter>();
