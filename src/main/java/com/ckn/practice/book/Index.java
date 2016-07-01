@@ -25,6 +25,11 @@ public class Index {
 	public void setIndexUrl(String indexUrl) {
 		this.indexUrl = indexUrl;
 	}
+	
+	@Override
+	public String toString() {
+		return "Index [indexName=" + indexName + ", indexUrl=" + indexUrl + "]";
+	}
 
 
 }
