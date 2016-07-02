@@ -4,3 +4,7 @@
 !.gitignore
 !/src
 !pom.xml
+
+#标记新的不需要管理的文件
+/src/main/java/*.tmp
+/src/main/java/*.pdf
