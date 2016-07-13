@@ -13,6 +13,13 @@ import com.itextpdf.text.pdf.PdfCopy;
 import com.itextpdf.text.pdf.PdfReader;
 
 public class PDFUnlock {
+
+    public static boolean isEncrypted(String filename) throws IOException{
+    	PdfReader reader=new PdfReader(filename);
+    	boolean isEncrypt=reader.isEncrypted();
+    	reader.close();
+    	return isEncrypt;
+    }
 	
 	public static PdfReader unlockPdf(PdfReader paramPdfReader) {
 		if (paramPdfReader == null)
@@ -49,13 +56,6 @@ public class PDFUnlock {
 		return null;
 	}
 	
-    public static boolean isEncrypted(String filename) throws IOException{
-    	PdfReader reader=new PdfReader(filename);
-    	boolean isEncrypt=reader.isEncrypted();
-    	reader.close();
-    	return isEncrypt;
-    }
-	
 	public static void unlockFile(String srcFp) throws IOException{
 		//文件复制
     	File tmp=File.createTempFile("CheknCopyWayDecryptPdf-", ".pdf");
@@ -69,11 +69,13 @@ public class PDFUnlock {
     	tmp.deleteOnExit();
 	}
 	
-	public static void main(String[] args){
+	public static void main(String[] args) throws IOException{
+		
 		String srcPth="C:\\Users\\Pactera-NEN\\Desktop\\1201714435.PDF";
 		String destPath="C:\\Users\\Pactera-NEN\\Desktop\\unlock_1201714435.PDF";
 		copyWayDecrypt(srcPth,destPath);
 		System.out.println("文件解密完成");
+		
 	}
 
 }
