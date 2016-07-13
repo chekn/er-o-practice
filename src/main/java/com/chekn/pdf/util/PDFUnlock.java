@@ -13,7 +13,7 @@ import com.itextpdf.text.pdf.PdfCopy;
 import com.itextpdf.text.pdf.PdfReader;
 
 public class PDFUnlock {
-
+	
 	public static PdfReader unlockPdf(PdfReader paramPdfReader) {
 		if (paramPdfReader == null)
 			return paramPdfReader;
@@ -48,6 +48,13 @@ public class PDFUnlock {
 		}
 		return null;
 	}
+	
+    public static boolean isEncrypted(String filename) throws IOException{
+    	PdfReader reader=new PdfReader(filename);
+    	boolean isEncrypt=reader.isEncrypted();
+    	reader.close();
+    	return isEncrypt;
+    }
 	
 	public static void unlockFile(String srcFp) throws IOException{
 		//文件复制
