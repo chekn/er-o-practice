@@ -13,5 +13,9 @@ public class ProjectUtils {
 		String sourcePath=classPath+"../../src/main/java/";
 		return sourcePath;
 	}
-
+	
+	public static String getCurrDirJarRun() {
+		return ProjectUtils.class.getProtectionDomain().getCodeSource().getLocation().getFile();
+	}
+	
 }

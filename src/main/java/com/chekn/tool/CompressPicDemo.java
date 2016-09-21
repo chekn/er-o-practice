@@ -137,7 +137,16 @@ import com.sun.image.codec.jpeg.JPEGImageEncoder;
       
     // main测试   
     // compressPic(大图片路径,生成小图片路径,大图片文件名,生成小图片文名,生成小图片宽度,生成小图片高度,是否等比缩放(默认为true))  
-    public static void main(String[] arg) {   
+    public static void main(String[] args) {   
+    	
+    	for (int i = 0; i < args.length; i++) {
+			/*if (i == 0) {
+				params.put("ftlDir", args[i]);
+			} else if (args[i].matches("\\d{2}:\\d{2}:\\d{2}")) {
+				times.add(args[i]);
+			}*/
+		}
+    	
         CompressPicDemo mypic = new CompressPicDemo();    
         
         String inputDirStr="E:\\changPic\\";
