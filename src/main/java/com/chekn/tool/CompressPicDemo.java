@@ -1,13 +1,20 @@
 package com.chekn.tool;  
   
-import java.awt.Image;  
-import java.awt.image.BufferedImage;  
-import java.io.File;  
-import java.io.FileOutputStream;  
-import java.io.IOException;  
-import javax.imageio.ImageIO;  
-import com.sun.image.codec.jpeg.JPEGCodec;  
-import com.sun.image.codec.jpeg.JPEGImageEncoder;  
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.imageio.ImageIO;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
+
+import com.sun.image.codec.jpeg.JPEGCodec;
+import com.sun.image.codec.jpeg.JPEGImageEncoder;
   
 /******************************************************************************* 
  * 缩略图类（通用） 本java类能将jpg、bmp、png、gif图片文件，进行等比或非等比的大小转换。 具体使用方法 
@@ -96,7 +103,8 @@ import com.sun.image.codec.jpeg.JPEGImageEncoder;
                  * Image.SCALE_SMOOTH 的缩略算法 生成缩略图片的平滑度的 
                  * 优先级比速度高 生成的图片质量比较好 但速度慢 
                  */   
-                tag.getGraphics().drawImage(img.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH), 0, 0, null);  
+                FileUtils.forceMkdir(new File(outputDir));
+                tag.getGraphics().drawImage(img.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH), 0, 0, null); 
                 FileOutputStream out = new FileOutputStream(outputDir + outputFileName);  
                 // JPEGImageEncoder可适用于其他图片类型的转换   
                 JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);   
@@ -137,26 +145,92 @@ import com.sun.image.codec.jpeg.JPEGImageEncoder;
       
     // main测试   
     // compressPic(大图片路径,生成小图片路径,大图片文件名,生成小图片文名,生成小图片宽度,生成小图片高度,是否等比缩放(默认为true))  
-    public static void main(String[] args) {   
+    public static void main(String[] args) {
+    	Map<ConArg,String> inParams=new HashMap<ConArg, String>();
+    	String[] defArgs= new String[]{".", "*.png", "1366", "1366", "./chekn"};
     	
-    	for (int i = 0; i < args.length; i++) {
-			/*if (i == 0) {
-				params.put("ftlDir", args[i]);
-			} else if (args[i].matches("\\d{2}:\\d{2}:\\d{2}")) {
-				times.add(args[i]);
-			}*/
+    	int argsLen=args.length;
+    	for (int i = 0; i < defArgs.length; i++) {
+    		ConArg ca= ConArg.fromOrder(i);
+    		String val=StringUtils.defaultIfBlank(i<argsLen ? args[i]:null, defArgs[i]);
+    		
+    		if(ca.validate(val))
+    			inParams.put( ca , val );
+    		else {
+    			System.err.print("x [arg error] : arg->"+args[i]);
+    			System.exit(0);
+    		}
+    			
 		}
     	
         CompressPicDemo mypic = new CompressPicDemo();    
         
-        String inputDirStr="E:\\changPic\\";
-        String outputDirStr="E:\\changPic\\tst\\";
+        String inputDirStr=inParams.get(ConArg.SOURCE);
+        String outputDirStr=inParams.get(ConArg.TARGET);
+        String file=inParams.get(ConArg.FILE);
+        String width=inParams.get(ConArg.WIDTH);
+        String height=inParams.get(ConArg.HEIGHT);
         for(File pic:new File(inputDirStr).listFiles()){
-        	if(!pic.isDirectory())
-        		mypic.compressPic(inputDirStr, outputDirStr, pic.getName(), pic.getName(), 1366, 1366, true);
+        	String fname=pic.getName();
+        	if( !pic.isDirectory() && fname.matches( file.replace("*", ".*?") ) )
+        		mypic.compressPic(inputDirStr, outputDirStr, pic.getName(), pic.getName(), Integer.parseInt(width), Integer.parseInt(height), true);
         	
-        	System.out.println(pic.getName());
+        	System.out.println(fname);
         }
         
     }   
+    
+    enum ConArg {
+    	SOURCE(0,".",null),
+    	FILE(1,"*.png","[^\\/:;<>]*"),
+    	WIDTH(2,"1366","[\\d]+"),
+    	HEIGHT(3,"1366","[\\d]+"),
+    	TARGET(4,"./chekn",null);
+    	
+    	public static ConArg fromOrder(int order){
+    		ConArg arg=null;
+    		for(ConArg u: ConArg.values()){
+				if( u.getOrder()==order ){
+					arg=u;
+					break;
+				}
+			}
+    		return arg;
+    	}
+    	
+    	public boolean validate(String val){
+    		return this.getRule()==null ? true : val.matches(this.getRule());
+    	}
+    	
+    	private int order;
+    	private String defVal;
+		private String rule;
+    	
+    	private ConArg(int order, String defVal, String rule) {
+    		this.order=order;
+    		this.defVal=defVal;
+    		this.rule=rule;
+    	}
+    	
+    	//getter and setter
+    	public int getOrder() {
+    		return order;
+		}
+		public void setOrder(int order) {
+			this.order = order;
+		}
+		public String getDefVal() {
+			return defVal;
+		}
+		public void setDefVal(String defVal) {
+			this.defVal = defVal;
+		}
+		public String getRule() {
+			return rule;
+		}
+		public void setRule(String rule) {
+			this.rule = rule;
+		}
+	}
+    
  }  
