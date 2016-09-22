@@ -1,4 +1,5 @@
-package com.chekn.tool;  
+package com.chekn.tool;
+
   
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -70,7 +71,13 @@ import com.sun.image.codec.jpeg.JPEGImageEncoder;
      }  
        
      // 图片处理   
-     public String compressPic() {   
+     public String compressPic() {
+    	// 路径字符 作弱化最后分隔符匹配支持 属于 功能部分
+        if(!StringUtils.endsWithAny(inputDir, new String[]{"/","\\"}))
+         	inputDir+=File.separator;
+ 		if(!StringUtils.endsWithAny(outputDir, new String[]{"/","\\"}))
+ 			outputDir+=File.separator;
+ 		
          try {   
              //获得源文件   
              file = new File(inputDir + inputFileName);   
@@ -147,7 +154,7 @@ import com.sun.image.codec.jpeg.JPEGImageEncoder;
     // compressPic(大图片路径,生成小图片路径,大图片文件名,生成小图片文名,生成小图片宽度,生成小图片高度,是否等比缩放(默认为true))  
     public static void main(String[] args) {
     	Map<ConArg,String> inParams=new HashMap<ConArg, String>();
-    	String[] defArgs= new String[]{".", "*.png", "1366", "1366", "./chekn"};
+    	String[] defArgs= new String[]{".", "*.jpg", "1366", "1366", "./chekn"};
     	
     	int argsLen=args.length;
     	for (int i = 0; i < defArgs.length; i++) {
@@ -163,29 +170,33 @@ import com.sun.image.codec.jpeg.JPEGImageEncoder;
     			
 		}
     	
-        CompressPicDemo mypic = new CompressPicDemo();    
-        
         String inputDirStr=inParams.get(ConArg.SOURCE);
         String outputDirStr=inParams.get(ConArg.TARGET);
         String file=inParams.get(ConArg.FILE);
         String width=inParams.get(ConArg.WIDTH);
         String height=inParams.get(ConArg.HEIGHT);
+
+		CompressPicDemo mypic = new CompressPicDemo();  
         for(File pic:new File(inputDirStr).listFiles()){
         	String fname=pic.getName();
-        	if( !pic.isDirectory() && fname.matches( file.replace("*", ".*?") ) )
+        	System.out.print("x [info] : " + fname );
+        	if( !pic.isDirectory() && fname.matches( file.replace(".", "\\.").replace("*", ".*?") ) ) {
         		mypic.compressPic(inputDirStr, outputDirStr, pic.getName(), pic.getName(), Integer.parseInt(width), Integer.parseInt(height), true);
+        		System.out.println(" dealed !!!");
+        	} else {
+        		System.out.println(" skip");
+        	}
         	
-        	System.out.println(fname);
         }
         
     }   
     
     enum ConArg {
     	SOURCE(0,".",null),
-    	FILE(1,"*.png","[^\\/:;<>]*"),
+    	FILE(1,"*.jpg","[^\\/:;<>]*"),
     	WIDTH(2,"1366","[\\d]+"),
     	HEIGHT(3,"1366","[\\d]+"),
-    	TARGET(4,"./chekn",null);
+    	TARGET(4,"./chekn", null);
     	
     	public static ConArg fromOrder(int order){
     		ConArg arg=null;
