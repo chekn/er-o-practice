@@ -5,7 +5,10 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.UUID;
+
+import junit.framework.TestCase;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -19,17 +22,21 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.chekn.db.MySQLWorkDb;
 
-public class SubCar {
+
+public class SubCar extends TestCase {
 	
 
-	public static void main(String[] args) throws Exception {		File dir=new File("c:/car");
+	public static void main(String[] args) throws Exception {		
+		/*File dir=new File("c:/car");
 		for(File file: dir.listFiles()) {
 			String fn=file.getName();
 			if("txt".equals( FilenameUtils.getExtension(fn)) ) {
 				String bd=FilenameUtils.getBaseName(fn);
 				sibd(bd.replaceAll("^\\d*_", ""));
 			}
-		}
+		}*/
+		
+		fcd();
 	}
 	
 	public static void g2f() throws IOException {
@@ -157,5 +164,91 @@ public class SubCar {
 		MySQLWorkDb.closeStatement(ps);
 		MySQLWorkDb.closeConnection();
 	}
+	
+	public static void fcd() throws Exception {
+		File dir=new File("c:/car");
+		for(File file: dir.listFiles()) {
+			String fn=file.getName();
+			if("txt".equals( FilenameUtils.getExtension(fn)) ) {
+				String sfc=FileUtils.readFileToString(file);
+				
+				String bd=FilenameUtils.getBaseName(fn);
+				System.out.println("\tx re :" + bd );
+				String p1="c:/car/"+bd;
+				FileUtils.forceMkdir(new File(p1));
+				
+				JSONObject jo= JSON.parseObject(sfc);
+				JSONArray ji=jo.getJSONObject("result").getJSONArray("factoryitems");
+				Object[] its= ji.toArray();
+				
+				for(Object it:its) {
+					JSONObject i=((JSONObject)it);
+					String id=i.getString("id");
+					String fa=(String) i.get("name");
+					
+					Connection conn=MySQLWorkDb.getConnection("ckn_ci");
+					PreparedStatement ps= conn.prepareStatement("select id from ci_brand where name='"+bd.replaceAll("^\\d*_", "")+"'");
+					ResultSet rs= ps.executeQuery();
+					if(!rs.next())
+						throw new RuntimeException("!!!! s v b:"+bd.replaceAll("^\\d*_", ""));
+					String bid= rs.getString(1);
+					PreparedStatement ps2= conn.prepareStatement("insert into ci_fac values(REPLACE(UUID(),'-',''),'"+fa+"','"+bid+"')");
+					ps2.executeUpdate();
+					MySQLWorkDb.closeStatement(ps);
+					MySQLWorkDb.closeConnection();
+					System.out.println("\tx ins :" + fa );
+				}
+			}
+		}
+	}
+	
+	
+	public void indb() throws Exception {
+		File dir=new File("c:/car");
+		for(File file: dir.listFiles()) {
+			String fn=file.getName();
+			if("txt".equals( FilenameUtils.getExtension(fn)) ) {
+				String sfc=FileUtils.readFileToString(file);
+				
+				String bd=FilenameUtils.getBaseName(fn);
+				String p1="c:/car/"+bd;
+				
+				JSONObject jo= JSON.parseObject(sfc);
+				JSONArray ji=jo.getJSONObject("result").getJSONArray("factoryitems");
+				Object[] its= ji.toArray();
+				
+				for(Object it:its) {
+					JSONObject i=((JSONObject)it);
+					String id=i.getString("id");
+					String fa=(String) i.get("name");
+					
+					JSONArray sis=i.getJSONArray("seriesitems");
+					for(Object si:sis.toArray()) {
+						JSONObject sii=((JSONObject)si);
+						String sid=sii.getString("id");
+						String sina=sii.getString("name");
+						
+						Connection conn=MySQLWorkDb.getConnection("ckn_ci");
+						PreparedStatement ps= conn.prepareStatement("select id from ci_fac where name='"+fa+"'");
+						ResultSet rs= ps.executeQuery();
+						if(!rs.next())
+							throw new RuntimeException("!!!! s v b:"+fa);
+						String fid= rs.getString(1);
+						PreparedStatement ps2= conn.prepareStatement("insert into ci_series values(REPLACE(UUID(),'-',''),'"+sina+"','"+fid+"')");
+						ps2.executeUpdate();
+						MySQLWorkDb.closeStatement(ps);
+						MySQLWorkDb.closeConnection();
+						println("\t\t x [ins] "+ sina);
+					}
+					
+					println("\t x [seek] end "+ fa);
+				}
+				println("x [bd] end "+ bd);
+			}
+		}
+		
+		//FileUtils.writeStringToFile(new File("c:/c.txt"), strBu.toString(), "UTF-8");
+	}
+	
 
 }
