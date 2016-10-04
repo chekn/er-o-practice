@@ -32,13 +32,17 @@ public class CopyOfHelloWorld extends AbstractHandler {
 			while(rs.next()) {
 				String pco= rs.getString("photos");
 				String[] pcs=pco.split(",");
+
+				strBu.append("<script src='http://www.w3cways.com/demo/LazyLoad/js/jquery.js' ></script>");
+				strBu.append("<script src='http://www.w3cways.com/demo/LazyLoad/js/jquery.lazyload.js' ></script>");
+				strBu.append("<script  type='text/javascript'>$(function () { $('img.lazy').lazyload(); });</script>");
 				
 				strBu.append("<div>");
 				strBu.append("<span> "+rs.getString("aid") +". "+ rs.getString("name")+ " ￥：" + rs.getString("price") +"</span><br>");
 				
 				if(pcs.length>1)
 					for(String pc:pcs) 
-						strBu.append("<img src='"+pc+"' /><br/>");
+						strBu.append("<img class='lazy' width='640' height='480' data-original='"+pc+"' /><br/>");
 				
 				strBu.append("</div>");
 				strBu.append("<br/><hr/><br/>");
