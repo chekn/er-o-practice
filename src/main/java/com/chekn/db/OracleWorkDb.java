@@ -1,4 +1,5 @@
-package com.test;
+package com.chekn.db;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -14,17 +15,17 @@ public class OracleWorkDb
 	
 	public static Connection getConnection()
 	{
-		new oracle.jdbc.driver.OracleDriver();       //¼ÓÔØÇı¶¯
+		new oracle.jdbc.driver.OracleDriver();       //åŠ è½½é©±åŠ¨
 		String url="jdbc:oracle:thin:@127.0.0.1:1521:orcl";
 		String name="chekn";
 		String pwd="chekncom";
 
-		//Class.forName("com.mysql.jdbc.Driver"); //¼ÓÔØJDBCÇı¶¯
+		//Class.forName("com.mysql.jdbc.Driver"); //åŠ è½½JDBCé©±åŠ¨
 		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver").newInstance();    //ĞèÒª´¦ÀíÒì³£
+			Class.forName("oracle.jdbc.driver.OracleDriver").newInstance();    //éœ€è¦å¤„ç†å¼‚å¸¸
 		}catch(Exception e)
 		{
-			System.err.println("JDBCÇı¶¯¼ÓÔØ³öÏÖÎÊÌâ");
+			System.err.println("JDBCé©±åŠ¨åŠ è½½å‡ºç°é—®é¢˜");
 			e.printStackTrace();
 		}
 		
@@ -33,7 +34,7 @@ public class OracleWorkDb
 			conn=DriverManager.getConnection(url,name,pwd);}
 		catch(SQLException e)
 		{
-			System.err.println("Á¬½Ó´íÎó");
+			System.err.println("è¿æ¥é”™è¯¯");
 			e.printStackTrace();
 		}
 		return conn;
@@ -41,17 +42,17 @@ public class OracleWorkDb
 	
 	public static Connection getConnectionToServer()
 	{
-		new oracle.jdbc.driver.OracleDriver();       //¼ÓÔØÇı¶¯
+		new oracle.jdbc.driver.OracleDriver();       //åŠ è½½é©±åŠ¨
 		String url="jdbc:oracle:thin:@192.168.1.200:1521:orcl";
 		String name="scierp";
 		String pwd="seechangecom";
 
-		//Class.forName("com.mysql.jdbc.Driver"); //¼ÓÔØJDBCÇı¶¯
+		//Class.forName("com.mysql.jdbc.Driver"); //åŠ è½½JDBCé©±åŠ¨
 		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver").newInstance();    //ĞèÒª´¦ÀíÒì³£
+			Class.forName("oracle.jdbc.driver.OracleDriver").newInstance();    //éœ€è¦å¤„ç†å¼‚å¸¸
 		}catch(Exception e)
 		{
-			System.err.println("JDBCÇı¶¯¼ÓÔØ³öÏÖÎÊÌâ");
+			System.err.println("JDBCé©±åŠ¨åŠ è½½å‡ºç°é—®é¢˜");
 			e.printStackTrace();
 		}
 		
@@ -60,13 +61,13 @@ public class OracleWorkDb
 			conn=DriverManager.getConnection(url,name,pwd);}
 		catch(SQLException e)
 		{
-			System.err.println("Á¬½Ó´íÎó");
+			System.err.println("è¿æ¥é”™è¯¯");
 			e.printStackTrace();
 		}
 		return conn;
 	}
 	
-	public static void closeConnection()    //¹Ø±ÕÁ¬½Ó
+	public static void closeConnection()    //å…³é—­è¿æ¥
 	{
 		try
 		{
@@ -76,7 +77,7 @@ public class OracleWorkDb
 		}
 		catch(SQLException e)
 		{
-			System.err.println("Êı¾İ¿âÁ¬½Ó¹Ø±Õ³ö´í");
+			System.err.println("æ•°æ®åº“è¿æ¥å…³é—­å‡ºé”™");
 		}
 	}
 	
@@ -90,11 +91,11 @@ public class OracleWorkDb
 		}
 		catch(SQLException e)
 		{
-			System.err.println("Êı¾İ¿âÁ¬½Ó¹Ø±Õ³ö´í");}
+			System.err.println("æ•°æ®åº“è¿æ¥å…³é—­å‡ºé”™");}
 	}
 	
 	
-	public static void closeResult(ResultSet rs)   //½á¹û·µ»ØÁ÷
+	public static void closeResult(ResultSet rs)   //ç»“æœè¿”å›æµ
 	{
 		try
 		{
@@ -104,6 +105,6 @@ public class OracleWorkDb
 		}
 		catch(SQLException e)
 		{
-			System.err.println("Êı¾İ¿â½á¹û·µ»ØÁ÷¹Ø±Õ³ö´í");}
+			System.err.println("æ•°æ®åº“ç»“æœè¿”å›æµå…³é—­å‡ºé”™");}
 	}
 }
