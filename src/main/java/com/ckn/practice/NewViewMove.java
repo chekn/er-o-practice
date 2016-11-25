@@ -34,7 +34,8 @@ public class NewViewMove {
 			try {
 				createView(connServer, sqlTxt);
 			} catch(Exception e) {
-				String table =e.getMessage();
+				System.err.println(e.getMessage());
+				//String table =e.getMessage().replaceAll(ta"", replacement);
 			}
 		}
 		
