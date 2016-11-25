@@ -15,18 +15,23 @@ public class MySQLWorkDb
 	
 	public static Connection getConnection(){
 		String defDb="weblog";	
-		return MySQLWorkDb.getConnection(defDb);
+		return MySQLWorkDb.getConnection("localhost", "root", "123456", defDb);
 	}
 	
-	public static Connection getConnection(String db)
+	public static Connection getConnection(String db){
+		String defDb=db;	
+		return MySQLWorkDb.getConnection("localhost", "root", "123456", defDb);
+	}
+	
+	public static Connection getConnection(String h, String u, String p, String db)
 	{
 		/*new oracle.jdbc.driver.OracleDriver();       //加载驱动
 		String url="jdbc:oracle:thin:@F22011270:1521:oracle";
 		String name="scott";
 		String pwd="12345";*/						//首先着重修改一下数据库的默认字符集的编码
-		String url="jdbc:mysql://localhost/"+db+"?useUnicode=true&characterEncoding=utf8";   ///成功
-		String name="root";
-		String pwd="123456";	
+		String url="jdbc:mysql://"+ h +"/"+db+"?useUnicode=true&characterEncoding=utf8";   ///成功
+		String name=u;
+		String pwd=p;	
 
 		/*Class.forName("com.mysql.jdbc.Driver"); //加载JDBC驱动*/
 		try {
