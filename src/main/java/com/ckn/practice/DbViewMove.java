@@ -14,7 +14,7 @@ import com.chekn.db.MySQLWorkDb;
  * @author CodeFlagAI
  * @date 2016年11月25日-下午9:12:09
  */
-public class NewViewMove {
+public class DbViewMove {
 	
 	public static void main(String[] args) throws SQLException{
 		Connection conn= MySQLWorkDb.getConnection("ubaoguandb");
