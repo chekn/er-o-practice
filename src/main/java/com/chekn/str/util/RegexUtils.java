@@ -33,7 +33,7 @@ public class RegexUtils {
     	List<String> pcks= new ArrayList<String>();
 		Pattern p = Pattern.compile(reg);
 		Matcher matP = p.matcher(cnt);
-		if(!matP.find()){
+		while(matP.find()){
 			//System.out.println(matP.group());;
 			pcks.add(matP.group());
 		}
