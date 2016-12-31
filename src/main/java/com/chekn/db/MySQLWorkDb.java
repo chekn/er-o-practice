@@ -58,6 +58,7 @@ public class MySQLWorkDb
 			conn=DriverManager.getConnection(url,name,pwd);}
 		catch(SQLException e)
 		{
+			e.printStackTrace();
 			System.err.println("连接错误");
 		}
 		return conn;
