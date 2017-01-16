@@ -20,17 +20,16 @@ import com.itextpdf.text.pdf.parser.TextRenderInfo;
 public class PdfExtractImagesUtils {
  
     /** The new document to which we've added a border rectangle. */
-    public static final String RESULT = "Img%s.%s";
+    public static final String RESULT = "%s.%s";
  
-    private Logger logger = LoggerFactory.getLogger(PdfExtractImagesUtils.class);
-    private String imgStoreDir="";
+    private static Logger logger = LoggerFactory.getLogger(PdfExtractImagesUtils.class);
     
     /**
      * Parses a PDF and extracts all the images.
      * @param src the source PDF
      * @param dest the resulting PDF
      */
-    public void extractImages(String filename, String outdir)
+    public static void extractImages(String filename, final String outdir)
         throws IOException, DocumentException {
         PdfReader reader = new PdfReader(filename);
         PdfReaderContentParser parser = new PdfReaderContentParser(reader);
