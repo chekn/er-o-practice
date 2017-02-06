@@ -162,6 +162,20 @@
 			<artifactId>freemarker</artifactId>
 			<version>2.3.23</version>
 		</dependency>
+		
+		<!-- pdfrenderer -->
+		<dependency>
+		    <groupId>com.sun.pdfview</groupId>
+		    <artifactId>pdfrenderer</artifactId>
+		    <version>0.9.1-patched</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.icepdf</groupId>
+		    <artifactId>icepdf-core</artifactId>
+		    <version>4.1.1</version>
+		</dependency>
+		
 	</dependencies>
 	<build>
 		<plugins>
