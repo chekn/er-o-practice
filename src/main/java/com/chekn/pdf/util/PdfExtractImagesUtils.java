@@ -92,7 +92,7 @@ public class PdfExtractImagesUtils {
 	}
 
 	/**
-	 * 生成图片
+	 * 生成图片, 只能处理 英文文档
 	 * 
 	 * @return
 	 */
